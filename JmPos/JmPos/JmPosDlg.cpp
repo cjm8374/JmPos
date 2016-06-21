@@ -8,6 +8,7 @@
 #include "afxdialogex.h"
 #include "MenuManagerDlg.h"
 #include "OrderManagerDlg.h"
+#include "SalesReportDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -429,6 +430,8 @@ void CJmPosDlg::OnBnClickedBtnPay10()
 void CJmPosDlg::OnBnClickedBtnReport()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CSalesReportDlg dlg(this);
+	dlg.DoModal();
 }
 
 void CJmPosDlg::UpdateOrderList(int nTableIndex, CListCtrl* pOrderList)
