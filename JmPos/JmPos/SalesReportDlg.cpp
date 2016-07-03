@@ -72,10 +72,12 @@ void CSalesReportDlg::OnBnClickedBtnSalesreportSearch()
 	sprintf_s(szQuery, "select count(sale_table) as count_table, sum(sale_total_price) as sum_price from tblSales where sale_date like %s", strDateSearch);
 
 	CppSQLite3Query data = g_SqlMgr.execQuery(szQuery);
+	CString strMoney;
 	if(!data.eof())
 	{
 		GetDlgItem(IDC_EDIT_SALESREPORT_TABLECOUNT)->SetWindowTextA(data.fieldValue(0));
-		GetDlgItem(IDC_EDIT_SALESREPORT_TOTALPRICE)->SetWindowTextA(data.fieldValue(1));
+		ConvertMoneyString(data.fieldValue(1), strMoney);
+		GetDlgItem(IDC_EDIT_SALESREPORT_TOTALPRICE)->SetWindowTextA(strMoney);
 	}
 }
 
@@ -117,7 +119,7 @@ void CSalesReportDlg::OnBnClickedBtnSalesreportViewMenus()
 	map<CString, int> mapOrderList;
 	CppSQLite3Query data = g_SqlMgr.execQuery(szQuery);
 	
-	if (!data.eof())
+	while (!data.eof())
 	{
 		CString strOrder(data.fieldValue(0));
 		vector<stOrder> vecOrder = ParsingOrderString(strOrder);
@@ -146,6 +148,7 @@ void CSalesReportDlg::OnBnClickedBtnSalesreportViewMenus()
 
 		CString strTemp;
 		strTemp.Format(_T("%d"), iter->second);
+		
 		pOrderList->SetItemText(nIndex, 1, strTemp);
 	}
 
@@ -169,7 +172,7 @@ BOOL CSalesReportDlg::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	CListCtrl* OrderList = (CListCtrl*)GetDlgItem(IDC_LIST_SALESREPORT_MENUS);
-	OrderList->InsertColumn(0, _T("메뉴"), LVCFMT_LEFT, 120);
+	OrderList->InsertColumn(0, _T("메뉴"), LVCFMT_LEFT, 180);
 	OrderList->InsertColumn(1, _T("수량"), LVCFMT_CENTER, 40);
 	//OrderList->InsertColumn(2, _T("가격"), LVCFMT_LEFT, 80);
 	OrderList->SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);

@@ -59,6 +59,7 @@ CString GetModuleFilePath(void);
 extern CppSQLite3DB g_SqlMgr;
 vector<stOrder> ParsingOrderString(CString strOrder);
 CString GetDateString();
+void ConvertMoneyString(CString parm_data, CString &parm_string);
 
 #define ORDER_MODE	1 //주문
 #define PAY_MODE	2 //계산

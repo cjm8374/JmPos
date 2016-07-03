@@ -19,6 +19,8 @@ private:
 	int			m_nMode;
 	vector<int>	m_vecOtherTable;
 	int			m_nTableIndex;
+	int			m_nTotalPrice;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 

@@ -13,6 +13,7 @@ IMPLEMENT_DYNAMIC(COrderManagerDlg, CDialog)
 
 COrderManagerDlg::COrderManagerDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(COrderManagerDlg::IDD, pParent)
+	, m_nTotalPrice(0)
 {
 
 }
@@ -20,6 +21,7 @@ COrderManagerDlg::COrderManagerDlg(CWnd* pParent /*=NULL*/)
 COrderManagerDlg::COrderManagerDlg(CWnd* pParent, int nMode, int  TableIndex)
 	: CDialog(COrderManagerDlg::IDD, pParent)
 	, m_nTableIndex(TableIndex)
+	, m_nTotalPrice(0)
 {
 	m_nMode = nMode;
 }
@@ -200,9 +202,14 @@ void COrderManagerDlg::UpdateTotalPrice()
 		nTotalPrice += (nCount * nPrice);
 	}
 
+	m_nTotalPrice = nTotalPrice;
+
 	CString strTotalPrice;
 	strTotalPrice.Format(_T("%d"), nTotalPrice);
-	this->GetDlgItem(IDC_EDIT_ORDERMGR_PRICE)->SetWindowTextA(strTotalPrice);
+
+	CString strMoney;
+	ConvertMoneyString(strTotalPrice, strMoney);
+	this->GetDlgItem(IDC_EDIT_ORDERMGR_PRICE)->SetWindowTextA(strMoney);
 }
 
 void COrderManagerDlg::OnBnClickedBtnOrdermgrOk()
@@ -227,12 +234,9 @@ void COrderManagerDlg::OnBnClickedBtnOrdermgrOk()
 				strOrder += _T('|');
 			}
 			
-			CString strTotalPrice;
-			this->GetDlgItem(IDC_EDIT_ORDERMGR_PRICE)->GetWindowTextA(strTotalPrice);
-
 			char szQuery[1024];
 			sprintf_s(szQuery, "insert into tblSales (sale_date,sale_table,sale_menu,sale_total_price) values ('%s',%d,'%s',%d);"
-				, GetDateString(), m_nTableIndex, strOrder, ::_ttoi(strTotalPrice));
+				, GetDateString(), m_nTableIndex, strOrder, m_nTotalPrice);
 			g_SqlMgr.execDML(szQuery);
 
 			CString strTableIndex;
