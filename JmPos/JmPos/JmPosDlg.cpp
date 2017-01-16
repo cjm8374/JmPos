@@ -430,8 +430,13 @@ void CJmPosDlg::OnBnClickedBtnPay10()
 void CJmPosDlg::OnBnClickedBtnReport()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	CSalesReportDlg dlg(this);
-	dlg.DoModal();
+	CString strPath = GetModuleFilePath() + _T("\\Settings.ini");;
+	int nMode = GetPrivateProfileInt(_T("Settings"), _T("View Report"), 0, strPath);
+	if (nMode == 1)
+	{
+		CSalesReportDlg dlg(this);
+		dlg.DoModal();
+	}	
 }
 
 void CJmPosDlg::UpdateOrderList(int nTableIndex, CListCtrl* pOrderList)
